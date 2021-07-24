@@ -24,7 +24,8 @@ public enum ExportFormat {
     OFX("Open Financial eXchange"),
     XML("GnuCash XML"),
     CSVA("GnuCash accounts CSV"),
-    CSVT("GnuCash transactions CSV");
+    CSVT("GnuCash transactions CSV"),
+    LEDGER("Ledger CLI");
 
     /**
      * Full name of the export format acronym
@@ -50,6 +51,8 @@ public enum ExportFormat {
             case CSVA:
             case CSVT:
                 return ".csv";
+            case LEDGER:
+                return ".ledger";
             default:
                 return ".txt";
         }
