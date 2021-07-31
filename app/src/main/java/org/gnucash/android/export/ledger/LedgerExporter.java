@@ -38,32 +38,37 @@ public class LedgerExporter extends Exporter {
 
     @Override
     public List<String> generateExport() throws ExporterException {
-        String outputFile = getExportCacheFilePath();
-        try {
-            Cursor cursor = mTransactionsDbAdapter.fetchTransactionsModifiedSince(mExportParams.getExportStartTime());
-            File file = new File(getExportCacheFilePath());
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
-            while (cursor.moveToNext()) {
-                Transaction transaction = mTransactionsDbAdapter.buildModelInstance(cursor);
-                Date date = new Date(transaction.getTimeMillis());
-                writer
-                        .append(dateFormat.format(date))
-                        .append(' ')
-                        .append(transaction.getDescription())
+        Cursor cursor = mTransactionsDbAdapter.fetchTransactionsModifiedSince(mExportParams.getExportStartTime());
+        StringBuilder contents = new StringBuilder();
+        while (cursor.moveToNext()) {
+            Transaction transaction = mTransactionsDbAdapter.buildModelInstance(cursor);
+            Date date = new Date(transaction.getTimeMillis());
+            contents
+                    .append(dateFormat.format(date))
+                    .append(' ')
+                    .append(transaction.getDescription())
+                    .append('\n');
+            for (Split split : transaction.getSplits()) {
+                String accountFullName = mAccountsDbAdapter.getAccountFullName(split.getAccountUID());
+                String sign = split.getType() == TransactionType.CREDIT ? "-" : "";
+                contents
+                        .append("    ")
+                        .append(accountFullName)
+                        .append("    ")
+                        .append(sign)
+                        .append(split.getQuantity().toLocaleString())
                         .append('\n');
-                for (Split split : transaction.getSplits()) {
-                    String accountFullName = mAccountsDbAdapter.getAccountFullName(split.getAccountUID());
-                    String sign = split.getType() == TransactionType.CREDIT ? "-" : "";
-                    writer
-                            .append("    ")
-                            .append(accountFullName)
-                            .append("    ")
-                            .append(sign)
-                            .append(split.getQuantity().toLocaleString())
-                            .append('\n');
-                }
-                writer.append('\n');
             }
+            contents.append('\n');
+        }
+        if (contents.length() == 0) {
+            return Collections.emptyList();
+        }
+        String outputFile = getExportCacheFilePath();
+        File file = new File(outputFile);
+        try {
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
+            writer.append(contents);
             writer.close();
         } catch (IOException e) {
             throw new ExporterException(mExportParams, e);
