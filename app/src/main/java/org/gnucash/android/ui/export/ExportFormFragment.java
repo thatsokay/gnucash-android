@@ -141,6 +141,7 @@ public class ExportFormFragment extends Fragment implements
 	@BindView(R.id.radio_qif_format) RadioButton mQifRadioButton;
 	@BindView(R.id.radio_xml_format) RadioButton mXmlRadioButton;
 	@BindView(R.id.radio_csv_transactions_format) RadioButton mCsvTransactionsRadioButton;
+	@BindView(R.id.radio_ledger_format) RadioButton mLedgerRadioButton;
 
 	@BindView(R.id.radio_separator_comma_format) RadioButton mSeparatorCommaButton;
 	@BindView(R.id.radio_separator_colon_format) RadioButton mSeparatorColonButton;
@@ -226,6 +227,13 @@ public class ExportFormFragment extends Fragment implements
 				mExportWarningTextView.setText(R.string.export_notice_csv);
 				OptionsViewAnimationUtils.expand(mExportDateLayout);
 				OptionsViewAnimationUtils.expand(mCsvOptionsLayout);
+				break;
+
+			case R.id.radio_ledger_format:
+				mExportFormat = ExportFormat.LEDGER;
+				mExportWarningTextView.setText(R.string.export_notice_ledger);
+				OptionsViewAnimationUtils.expand(mExportDateLayout);
+				OptionsViewAnimationUtils.collapse(mCsvOptionsLayout);
 				break;
 
 			case R.id.radio_separator_comma_format:
@@ -498,6 +506,7 @@ public class ExportFormFragment extends Fragment implements
 		mQifRadioButton.setOnClickListener(radioClickListener);
 		mXmlRadioButton.setOnClickListener(radioClickListener);
 		mCsvTransactionsRadioButton.setOnClickListener(radioClickListener);
+		mLedgerRadioButton.setOnClickListener(radioClickListener);
 
 		mSeparatorCommaButton.setOnClickListener(radioClickListener);
 		mSeparatorColonButton.setOnClickListener(radioClickListener);
@@ -509,6 +518,7 @@ public class ExportFormFragment extends Fragment implements
 			case OFX: mOfxRadioButton.performClick(); break;
 			case XML: mXmlRadioButton.performClick(); break;
 			case CSVT: mCsvTransactionsRadioButton.performClick(); break;
+			case LEDGER: mLedgerRadioButton.performClick(); break;
 		}
 
 		if (GnuCashApplication.isDoubleEntryEnabled()){

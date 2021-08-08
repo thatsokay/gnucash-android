@@ -82,6 +82,12 @@
                     android:checked="true"
                     android:text="CSV"/>
 
+                <RadioButton android:id="@+id/radio_ledger_format"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="LEDGER"/>
+
                 <RadioButton android:id="@+id/radio_qif_format"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
