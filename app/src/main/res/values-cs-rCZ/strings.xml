@@ -173,8 +173,10 @@
     <item>TRADING</item>
   </string-array>
   <string-array name="export_formats">
-    <item>QIF</item>
+    <item>CSV</item>
+    <item>Ledger</item>
     <item>OFX</item>
+    <item>QIF</item>
     <item>XML</item>
   </string-array>
   <!-- Default title for color picker dialog [CHAR LIMIT=30] -->

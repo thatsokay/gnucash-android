@@ -137,11 +137,12 @@ public class ExportFormFragment extends Fragment implements
 
 	@BindView(R.id.export_date_layout) LinearLayout mExportDateLayout;
 
-	@BindView(R.id.radio_ofx_format) RadioButton mOfxRadioButton;
-	@BindView(R.id.radio_qif_format) RadioButton mQifRadioButton;
-	@BindView(R.id.radio_xml_format) RadioButton mXmlRadioButton;
-	@BindView(R.id.radio_csv_transactions_format) RadioButton mCsvTransactionsRadioButton;
-	@BindView(R.id.radio_ledger_format) RadioButton mLedgerRadioButton;
+	/**
+	 * Spinner for selecting destination for the exported file.
+	 * The destination could either be SD card, or another application which
+	 * accepts files, like Google Drive.
+	 */
+	@BindView(R.id.spinner_export_format) Spinner mExportFormatSpinner;
 
 	@BindView(R.id.radio_separator_comma_format) RadioButton mSeparatorCommaButton;
 	@BindView(R.id.radio_separator_colon_format) RadioButton mSeparatorColonButton;
@@ -356,11 +357,30 @@ public class ExportFormFragment extends Fragment implements
 	 * Bind views to actions when initializing the export form
 	 */
 	private void bindViewListeners(){
+		ArrayAdapter<CharSequence> exportFormatAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.export_formats, android.R.layout.simple_spinner_item);
+		exportFormatAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		mExportFormatSpinner.setAdapter(exportFormatAdapter);
+		mExportFormatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+				if (view == null) return;
+				switch (position) {
+					case 0:
+
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> adapterView) {
+
+			}
+		});
+
 		// export destination bindings
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+		ArrayAdapter<CharSequence> exportDestinationAdapter = ArrayAdapter.createFromResource(getActivity(),
 		        R.array.export_destinations, android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);		
-		mDestinationSpinner.setAdapter(adapter);
+		exportDestinationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);		
+		mDestinationSpinner.setAdapter(exportDestinationAdapter);
 		mDestinationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
